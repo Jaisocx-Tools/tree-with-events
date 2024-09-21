@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>JS Tree</title>
+
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <link href="/jstree/www/css/tree.css" rel="stylesheet" />
+        <script type="text/javascript" src="/jstree/www/js/JSTree.js"></script>
+        <style>
+            .grid-container {
+                display: grid;
+                gap: 12px;
+                padding: 12px;
+                grid-template-columns: 260px 300px;
+                background-color: #efe;
+                margin: 0 auto;
+                width:min-content;
+            }
+
+            #content {
+                border: 1px solid #eee;
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>JS Tree</h1>
+        <h2>Github Pages</h2>
+        <div class="grid-container">
+            <div id="jstree-01"></div>
+            <div id="content"></div>
+        </div>
+
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const tree = new JSTree();
+                tree.elementId = 'jstree-01';
+                tree.url = '/jstree/www/data/tree-data.json';
+                tree.load();
+            });
+
+            const htmlTexts = [
+                `<h3>Hello World!</h3>
+                <p style="color:#26d">Have fun with styling and using JSTree tool.</p>`,
+
+                `<h3>Hello World!</h3>
+                <p style="color:#d83">You can edit code easily, JSTree class is lightweight.</p>`,
+
+                `<h3>Hello World!</h3>
+                <p style="color:#00bb00; font-size: 1.4rem;">Have a nice day.</p>`,
+            ];
+
+            function exampleFunction(htmlTextsIndex) {                
+                const elem = document.getElementById('content');
+                elem.innerHTML = htmlTexts[htmlTextsIndex];
+            }
+        </script>
+    </body>
+</html>

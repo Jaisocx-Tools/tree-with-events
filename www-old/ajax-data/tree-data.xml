@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <node>
+        <title>hallo1</title>
+        <opened>true</opened>
+        <children>
+            <node>
+                <title>child11</title>
+            </node>
+            <node>
+                <title>child12</title>
+                <opened>false</opened>
+                <children>
+                    <node>
+                        <title>subchild121</title>
+                    </node>
+                    <node>
+                        <title>subchild122</title>
+                    </node>
+                </children>
+            </node>
+        </children>
+    </node>
+    <node>
+        <title>hallo2</title>
+    </node>
+</root>
