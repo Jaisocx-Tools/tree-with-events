@@ -122,7 +122,7 @@ class JSTree
     }
 
     attachEvents() {
-        document.addEventListener('click', (event) => {
+        const documentClickEventHandler = (event) => {
             event.stopPropagation();
             event.preventDefault();
 
@@ -134,6 +134,9 @@ class JSTree
                 if (this.debug === true) {
                     console.log('tree elem clicked: handler is not a function');
                 }
+
+                document.removeEventListener('click', documentClickEventHandler);
+
                 return;
             }
 
@@ -161,7 +164,9 @@ class JSTree
 
                 currentElement = currentElement.parentElement;
             }
-        });
+        };
+
+        document.addEventListener('click', documentClickEventHandler);
     }
 }
 
