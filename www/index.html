@@ -35,7 +35,7 @@
         <script>
 
             /* an example to use for handling a mouse click on a tree elem. parameter is elem json. */
-            const exampleFunction = (node) => {                
+            const exampleFunction = (event, node) => {                
                 const elem = document.getElementById('content');
                 elem.innerHTML = node.text ?? '';
             };
