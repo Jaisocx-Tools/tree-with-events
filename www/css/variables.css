@@ -1,9 +1,9 @@
 :root {
   --toggle-button-size: 60%;
-  --toggle-button-animated--image-url: url('/jstree/www/images/icons/icons8-pfeil_-ausklappen.gif');
-  --toggle-button-closed--image-url: url('/jstree/www/images/icons/icons8-pfeil_-einklappen-96.png');
-  --toggle-button-opened--image-url: url('/jstree/www/images/icons/icons8-pfeil_-ausklappen-96.png');
-  --toggle-button-without-subtree--image-url: url('/jstree/www/images/icons/without-subtree.svg');
+  --toggle-button-animated--image-url: url('/jstree/www/images/icons/button-animated.gif');
+  --toggle-button-closed--image-url: none;
+  --toggle-button-opened--image-url: url('/jstree/www/images/icons/button-opened.png');
+  --toggle-button-without-subtree--image-url: url('/jstree/www/images/icons/button-without-subtree.svg');
 
   --background-color--tree: #ffffff;
 

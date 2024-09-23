@@ -33,28 +33,23 @@
         </div>
 
         <script>
+
+            /* an example to use for handling a mouse click on a tree elem. parameter is elem json. */
+            const exampleFunction = (node) => {                
+                const elem = document.getElementById('content');
+                elem.innerHTML = node.text ?? '';
+            };
+
             window.addEventListener('DOMContentLoaded', () => {
                 const tree = new JSTree();
-                tree.elementId = 'jstree-01';
-                tree.url = '/jstree/www/data/tree-data.json';
-                tree.load();
+                tree
+                    .setElementId('jstree-01')
+                    .setUrl('/jstree/www/data/tree-data.json')
+                    .setNodeClickEventHandler(exampleFunction)
+                    .setDebug(false)
+                    .load();
             });
 
-            const htmlTexts = [
-                `<h3>Hello World!</h3>
-                <p style="color:#26d">Have fun with styling and using JSTree tool.</p>`,
-
-                `<h3>Hello World!</h3>
-                <p style="color:#d83">You can edit code easily, JSTree class is lightweight.</p>`,
-
-                `<h3>Hello World!</h3>
-                <p style="color:#00bb00; font-size: 1.4rem;">Have a nice day.</p>`,
-            ];
-
-            function exampleFunction(htmlTextsIndex) {                
-                const elem = document.getElementById('content');
-                elem.innerHTML = htmlTexts[htmlTextsIndex];
-            }
         </script>
     </body>
 </html>

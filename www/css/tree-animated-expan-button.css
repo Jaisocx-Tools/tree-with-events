@@ -1,5 +1,5 @@
 @import url('/jstree/www/css/variables.css');
-.tree {
+.tree{
     background-color: var(--background-color--tree);
 }
 
@@ -101,19 +101,29 @@
 
 .tree .toggle-button > span.opened {
     background-image: var(--toggle-button-opened--image-url);
-    transform: rotate(180deg);
 }
 .tree .toggle-button > span.closed {
-    background-image: var(--toggle-button-opened--image-url);
+    background-image: var(--toggle-button-closed--image-url);
     transform: rotate(90deg);
 }
 .tree .toggle-button > span.without-subtree {
     background-image: var(--toggle-button-without-subtree--image-url);
     color: crimson !important;
 }
-
 .tree .toggle-button > span.animated {
+    background-image: var(--toggle-button-animated--image-url);
+}
+
+.tree .toggle-button.toggle-with-subtree-opened:hover > span.opened,
+.tree .toggle-button.toggle-with-subtree-opened:hover > span.closed,
+.tree .toggle-button.toggle-with-subtree-closed:hover > span.opened,
+.tree .toggle-button.toggle-with-subtree-closed:hover > span.closed {
     display: none;
+}
+
+.tree .toggle-button.toggle-with-subtree-opened:hover > span.animated,
+.tree .toggle-button.toggle-with-subtree-closed:hover > span.animated {
+    display: block;
 }
 
 .tree .toggle-with-subtree-closed span.opened {
