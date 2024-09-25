@@ -44,7 +44,7 @@ class JSTree
             .then(response => response.json())
             .then(json => {
                 this.render(json);
-                this.attachEvents();
+                this.addEventListeners();
             });
     }
 
@@ -122,82 +122,80 @@ class JSTree
         }
     }
 
-    attachEvents() {
-        const toggleButtonHandler = (event) => {
-            const toggleButton = event.target.closest('.toggle-button');
-            if (
-                !event.target.classList.contains('toggle-button') && 
-                (toggleButton === null)
-            ) {
-                return;
-            }
+    toggleButtonHandler(event) {
+        const toggleButton = event.target.closest('.toggle-button');
+        if (
+            !event.target.classList.contains('toggle-button') && 
+            (toggleButton === null)
+        ) {
+            return;
+        }
 
-            if (toggleButton.classList.contains(this.CLASS_WITHOUT_SUBTREE)) {
-                return;
-            }
+        if (toggleButton.classList.contains(this.CLASS_WITHOUT_SUBTREE)) {
+            return;
+        }
 
-            event.stopPropagation();
-            event.preventDefault();
+        event.preventDefault();
 
-            let subtreeContainer = toggleButton.closest('li').getElementsByTagName('ul')[0];
+        let subtreeContainer = toggleButton.closest('li').getElementsByTagName('ul')[0];
 
-            if(toggleButton.classList.contains(this.CLASS_CLOSED)) {
-                toggleButton.classList.remove(this.CLASS_CLOSED);
-                toggleButton.classList.add(this.CLASS_OPENED);
-                subtreeContainer.style.display = 'block';
-            }else if(toggleButton.classList.contains(this.CLASS_OPENED)) {
-                toggleButton.classList.remove(this.CLASS_OPENED);
-                toggleButton.classList.add(this.CLASS_CLOSED);
-                subtreeContainer.style.display = 'none';
-            }
-        };
-
-        const documentBaseEventHandler = (event, handler) => {
-            if (this.debug === true) {
-                console.log('js tree doc click event handler');
-            }
-
-            let currentElement = event.target;
-            if (!currentElement.classList.contains('tree-element-label')) {
-                if (this.debug === true) {
-                    console.log('tree elem clicked: is not a tree elem label', currentElement);
-                }
-                return;
-            }
-
-            while(currentElement) {                
-                if (currentElement.classList.contains('tree-element')) {
-                    const node = JSON.parse(currentElement.dataset.json);
-
-                    if (this.debug === true) {
-                        console.log(`tree elem : ${event.name}`, currentElement, node);
-                    }
-
-                    if (node.href && node.href.substring(0, 'javascript:'.length) !== 'javascript:') {
-                        return;
-                    }
-      
-                    event.preventDefault();
-                    event.stopPropagation();
-      
-                    handler(event, node);
-                    break;
-                }
-
-                currentElement = currentElement.parentElement;
-            }
-        };
-
-        const documentClickEventHandler = (event) => {
-            documentBaseEventHandler(event, this.nodeClickEventHandler);
-        };
-
-        document.addEventListener('click', toggleButtonHandler);
-
-        if (typeof(this.nodeClickEventHandler) === 'function') {
-            document.addEventListener('click', documentClickEventHandler);
+        if(toggleButton.classList.contains(this.CLASS_CLOSED)) {
+            toggleButton.classList.remove(this.CLASS_CLOSED);
+            toggleButton.classList.add(this.CLASS_OPENED);
+            subtreeContainer.style.display = 'block';
+        }else if(toggleButton.classList.contains(this.CLASS_OPENED)) {
+            toggleButton.classList.remove(this.CLASS_OPENED);
+            toggleButton.classList.add(this.CLASS_CLOSED);
+            subtreeContainer.style.display = 'none';
         }
     }
-    
+
+    documentBaseEventHandler(event, handler) {
+        if (this.debug === true) {
+            console.log('js tree doc click event handler');
+        }
+
+        let currentElement = event.target;
+        if (!currentElement.classList.contains('tree-element-label')) {
+            if (this.debug === true) {
+                console.log('tree elem click handler: is not a tree elem label', currentElement);
+            }
+            return;
+        }
+
+        const treeElem = currentElement.closest('.tree-element');
+        if (!treeElem) {
+            if (this.debug === true) {
+                console.log('tree elem click handler: is not a predefined tree elems structure');
+            }
+            return;
+        }
+
+        const node = JSON.parse(treeElem.dataset.json);
+
+        if (this.debug === true) {
+            console.log(`tree elem : ${event.name}`, treeElem, node);
+        }
+
+        if (node.href && node.href.substring(0, 'javascript:'.length) !== 'javascript:') {
+            return;
+        }
+
+        event.preventDefault();
+
+        handler(event, node);
+    }
+
+    documentClickEventHandler(event) {
+        this.documentBaseEventHandler(event, this.nodeClickEventHandler);
+    }
+
+    addEventListeners() {
+        document.addEventListener('click', this.toggleButtonHandler.bind(this));
+
+        if (typeof(this.nodeClickEventHandler) === 'function') {
+            document.addEventListener('click', this.documentClickEventHandler.bind(this));
+        }
+    }    
 }
 

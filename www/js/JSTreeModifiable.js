@@ -41,7 +41,7 @@ class JSTreeModifiable {
             .then(response => response.json())
             .then(json => {
                 this.render(json);
-                this.attachEvents();
+                this.addEventListeners();
             });
     }
 
@@ -119,118 +119,123 @@ class JSTreeModifiable {
         }
     }
 
-    attachEvents() {
-        const toggleButtonHandler = (event) => {
-            const toggleButton = event.target.closest('.toggle-button');
-            if (
-                !event.target.classList.contains('toggle-button') && 
-                (toggleButton === null)
-            ) {
-                return;
-            }
-
-            if (toggleButton.classList.contains(this.CLASS_WITHOUT_SUBTREE)) {
-                return;
-            }
-
-            event.stopPropagation();
-            event.preventDefault();
-
-            let subtreeContainer = toggleButton.closest('li').getElementsByTagName('ul')[0];
-
-            if(toggleButton.classList.contains(this.CLASS_CLOSED)) {
-                toggleButton.classList.remove(this.CLASS_CLOSED);
-                toggleButton.classList.add(this.CLASS_OPENED);
-                subtreeContainer.style.display = 'block';
-            }else if(toggleButton.classList.contains(this.CLASS_OPENED)) {
-                toggleButton.classList.remove(this.CLASS_OPENED);
-                toggleButton.classList.add(this.CLASS_CLOSED);
-                subtreeContainer.style.display = 'none';
-            }
-        };
-
-        const documentBaseEventHandler = (event, handler) => {
-            if (this.debug === true) {
-                console.log('js tree doc click event handler');
-            }
-
-            let currentElement = event.target;
-            if (!currentElement.classList.contains('tree-element-label')) {
-                if (this.debug === true) {
-                    console.log('tree elem clicked: is not a tree elem label', currentElement);
-                }
-                return;
-            }
-
-            while(currentElement) {                
-                if (currentElement.classList.contains('tree-element')) {
-                    const node = JSON.parse(currentElement.dataset.json);
-
-                    if (this.debug === true) {
-                        console.log(`tree elem : ${event.name}`, currentElement, node);
-                    }
-
-                    if (node.href && node.href.substring(0, 'javascript:'.length) !== 'javascript:') {
-                        return;
-                    }
-      
-                    event.preventDefault();
-                    event.stopPropagation();
-      
-                    handler(event, node);
-                    break;
-                }
-
-                currentElement = currentElement.parentElement;
-            }
-        };
-
-        const contextmenuEventHandler = (event) => {
-            let contextMenuContainer = null;
-            try{
-                contextMenuContainer = document.getElementById(this.CLASS_AND_ID__CONTEXT_MENU);
-                contextMenuContainer.innerHTML = '';
-            }catch(e){}
-            if(!contextMenuContainer) {
-                contextMenuContainer = document.createElement('DIV');
-                contextMenuContainer.id = this.CLASS_AND_ID__CONTEXT_MENU;
-                contextMenuContainer.className = this.CLASS_AND_ID__CONTEXT_MENU;
-                contextMenuContainer = document.body.appendChild(contextMenuContainer);
-            }
-
-            let labelElem = event.target;
-            let currentTreeNodeContainer = labelElem.closest('li');
-            let subtreeContainer = currentTreeNodeContainer.getElementsByTagName('ul')[0];
-
-            this.updateContextMenu(event, subtreeContainer, currentTreeNodeContainer, contextMenuContainer, labelElem);
-        };
-
-        const documentClickEventHandler = (event) => {
-            documentBaseEventHandler(event, this.nodeClickEventHandler);
-        };
-
-        const documentContextmenuEventHandler = (event) => {
-            documentBaseEventHandler(event, contextmenuEventHandler);
-        };
-
-        const closeContextMenuIfBeyoundContextmenuClick = (event) => {
-            const isClickBeyoundContextMenu = event.target.closest(this.CLASS_AND_ID__CONTEXT_MENU) === null;
-            if (isClickBeyoundContextMenu) {
-                const contextMenuContainer = document.getElementById(this.CLASS_AND_ID__CONTEXT_MENU);
-                if (contextMenuContainer && contextMenuContainer.style) {
-                    contextMenuContainer.style.display = 'none';
-                }
-            }
-        };
-
-        document.addEventListener('click', toggleButtonHandler);
-
-        if (typeof(this.nodeClickEventHandler) === 'function') {
-            document.addEventListener('click', documentClickEventHandler);
+    toggleButtonHandler(event) {
+        const toggleButton = event.target.closest('.toggle-button');
+        if (
+            !event.target.classList.contains('toggle-button') && 
+            (toggleButton === null)
+        ) {
+            return;
         }
 
-        document.addEventListener('contextmenu', documentContextmenuEventHandler);
-        document.addEventListener('click', closeContextMenuIfBeyoundContextmenuClick);
+        if (toggleButton.classList.contains(this.CLASS_WITHOUT_SUBTREE)) {
+            return;
+        }
+
+        event.preventDefault();
+
+        let subtreeContainer = toggleButton.closest('li').getElementsByTagName('ul')[0];
+
+        if(toggleButton.classList.contains(this.CLASS_CLOSED)) {
+            toggleButton.classList.remove(this.CLASS_CLOSED);
+            toggleButton.classList.add(this.CLASS_OPENED);
+            subtreeContainer.style.display = 'block';
+        }else if(toggleButton.classList.contains(this.CLASS_OPENED)) {
+            toggleButton.classList.remove(this.CLASS_OPENED);
+            toggleButton.classList.add(this.CLASS_CLOSED);
+            subtreeContainer.style.display = 'none';
+        }
+    }
+
+    documentBaseEventHandler(event, handler) {
+        if (this.debug === true) {
+            console.log('js tree doc click event handler');
+        }
+
+        let currentElement = event.target;
+        if (!currentElement.classList.contains('tree-element-label')) {
+            if (this.debug === true) {
+                console.log('tree elem click handler: is not a tree elem label', currentElement);
+            }
+            return;
+        }
+
+        const treeElem = currentElement.closest('.tree-element');
+        if (!treeElem) {
+            if (this.debug === true) {
+                console.log('tree elem click handler: is not a predefined tree elems structure');
+            }
+            return;
+        }
+
+        const node = JSON.parse(treeElem.dataset.json);
+
+        if (this.debug === true) {
+            console.log(`tree elem : ${event.name}`, treeElem, node);
+        }
+
+        if (node.href && node.href.substring(0, 'javascript:'.length) !== 'javascript:') {
+            return;
+        }
+
+        event.preventDefault();
+
+        handler(event, node);
+    }
+
+    documentClickEventHandler(event) {
+        this.documentBaseEventHandler(event, this.nodeClickEventHandler);
+    }
+
+    contextmenuEventHandler(event) {
+        let contextMenuContainer = null;
+        try{
+            contextMenuContainer = document.getElementById(this.CLASS_AND_ID__CONTEXT_MENU);
+            contextMenuContainer.innerHTML = '';
+        }catch(e){}
+        if(!contextMenuContainer) {
+            contextMenuContainer = document.createElement('DIV');
+            contextMenuContainer.id = this.CLASS_AND_ID__CONTEXT_MENU;
+            contextMenuContainer.className = this.CLASS_AND_ID__CONTEXT_MENU;
+            contextMenuContainer = document.body.appendChild(contextMenuContainer);
+        }
+
+        let labelElem = event.target;
+        let currentTreeNodeContainer = labelElem.closest('li');
+        let subtreeContainer = currentTreeNodeContainer.getElementsByTagName('ul')[0];
+
+        this.updateContextMenu(
+            event, 
+            subtreeContainer, 
+            currentTreeNodeContainer, 
+            contextMenuContainer, 
+            labelElem
+        );
+    }
+
+    documentContextmenuEventHandler(event) {
+        this.documentBaseEventHandler(event, this.contextmenuEventHandler.bind(this));
+    }
+
+    closeContextMenuIfBeyoundContextmenuClick(event) {
+        const isClickBeyoundContextMenu = event.target.closest(this.CLASS_AND_ID__CONTEXT_MENU) === null;
+        if (isClickBeyoundContextMenu) {
+            const contextMenuContainer = document.getElementById(this.CLASS_AND_ID__CONTEXT_MENU);
+            if (contextMenuContainer && contextMenuContainer.style) {
+                contextMenuContainer.style.display = 'none';
+            }
+        }
+    }
+
+    addEventListeners() {
+        document.addEventListener('click', this.toggleButtonHandler.bind(this));
+
+        if (typeof(this.nodeClickEventHandler) === 'function') {
+            document.addEventListener('click', this.documentClickEventHandler.bind(this));
+        }
+
+        document.addEventListener('contextmenu', this.documentContextmenuEventHandler.bind(this));
+        document.addEventListener('click', this.closeContextMenuIfBeyoundContextmenuClick.bind(this));
     }
 
     updateContextMenu(event, container, li, contextMenuContainer, titleElem) {
@@ -399,3 +404,5 @@ class JSTreeModifiable {
         });
     }
 }
+
+
