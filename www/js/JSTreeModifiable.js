@@ -129,12 +129,12 @@ class JSTreeModifiable {
                 return;
             }
 
-            event.stopPropagation();
-            event.preventDefault();
-
             if (toggleButton.classList.contains(this.CLASS_WITHOUT_SUBTREE)) {
                 return;
             }
+
+            event.stopPropagation();
+            event.preventDefault();
 
             let subtreeContainer = toggleButton.closest('li').getElementsByTagName('ul')[0];
 
@@ -162,9 +162,6 @@ class JSTreeModifiable {
                 return;
             }
 
-            event.stopPropagation();
-            event.preventDefault();
-
             while(currentElement) {                
                 if (currentElement.classList.contains('tree-element')) {
                     const node = JSON.parse(currentElement.dataset.json);
@@ -173,6 +170,13 @@ class JSTreeModifiable {
                         console.log(`tree elem : ${event.name}`, currentElement, node);
                     }
 
+                    if (node.href && node.href.substring(0, 'javascript:'.length) !== 'javascript:') {
+                        return;
+                    }
+      
+                    event.preventDefault();
+                    event.stopPropagation();
+      
                     handler(event, node);
                     break;
                 }
