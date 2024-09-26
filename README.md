@@ -14,7 +14,7 @@ this sample web project is a sample of css styling of a nested json objects of s
 the html markup is produced by JSTree javascript class, used here in this project with javascript source code and no 3rd party dependencies.
 
 ## future improvements
-easy to implement themes switching.
+easy to implement themes choice.
 
 
 ## how to use
