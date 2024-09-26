@@ -23,10 +23,10 @@ class Hierarchy
      * @ORM\OrderBy({"position" = "ASC"})
      * @Serializer\Groups({"default"})
      */
-    private $children;
+    private $subtree;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Hierarchy", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Hierarchy", inversedBy="subtree")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
     */
     private $parents;
@@ -92,14 +92,14 @@ class Hierarchy
 
     public function __construct()
     {
-        $this->children = new ArrayCollection();
+        $this->subtree = new ArrayCollection();
     }
 
-    public function getChildren(){
-        return $this->children;
+    public function getSubtree(){
+        return $this->subtree;
     }
-    public function setChildren($children){
-        $this->children = $children;
+    public function setSubtree($subtree){
+        $this->subtree = $subtree;
         return $this;
     }
     public function getParents(){

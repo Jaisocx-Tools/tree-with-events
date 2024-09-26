@@ -34,7 +34,7 @@ class TreeController extends EntityAction
         return new JsonResponse($body, 200, [], true);
     }
 
-    protected function getItemsWithChildren($parentId){
+    protected function getItemsWithSubtree($parentId){
         $repository = $this->getDoctrine()->getRepository($this->entityClass);
         $items = $repository->findByParentIdOrdered($parentId);
         $data = [];
@@ -54,9 +54,9 @@ class TreeController extends EntityAction
             'href' => $item->getHref(),
             'icon' => $item->getIcon()
         ];
-        $children = $this->getItemsWithChildren($item->getId());
-        if(!empty($children)){
-            $data['children'] = $children;
+        $subtree = $this->getItemsWithSubtree($item->getId());
+        if(!empty($subtree)){
+            $data['subtree'] = $subtree;
         }
         return $data;
     }

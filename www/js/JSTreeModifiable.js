@@ -112,10 +112,10 @@ class JSTreeModifiable {
         }
 
         const count = subtreeNodes.length;
-        let childNode = null;
+        let subtreeNode = null;
         for(let i=0; i<count; i++){
-            childNode = subtreeNodes[i];
-            this.renderOneTreeNode(childNode, ul);
+            SubtreeNode = subtreeNodes[i];
+            this.renderOneTreeNode(subtreeNode, ul);
         }
     }
 
@@ -243,22 +243,22 @@ class JSTreeModifiable {
         ulCM = contextMenuContainer.appendChild(ulCM);
 
         let liAppend = document.createElement('LI');
-        liAppend.innerHTML = 'Append child node';
+        liAppend.innerHTML = 'Append subtree node';
         liAppend = ulCM.appendChild(liAppend);
         liAppend.onclick = function(){
             contextMenuContainer.style.display = 'none';
             const node = {title: 'new node', href: 'javascript: void(0);', parents: parseInt(li.getAttribute('data-id'))};
-            let childElemsContainer = null;
-            let lastChildPosition = 0;
+            let subtreeElemsContainer = null;
+            let lastSubtreePosition = 0;
             try{
-                childElemsContainer = li.getElementsByTagName('UL')[0];
+                subtreeElemsContainer = li.getElementsByTagName('UL')[0];
             }catch(e){}
-            if(!childElemsContainer){
-                childElemsContainer = document.createElement('UL');
-                childElemsContainer = li.appendChild(childElemsContainer);
+            if(!subtreeElemsContainer){
+                subtreeElemsContainer = document.createElement('UL');
+                subtreeElemsContainer = li.appendChild(subtreeElemsContainer);
                 const toggleButton = li.getElementsByClassName(this.CLASS_NOCHILDREN)[0];
                 toggleButton.className = this.CLASS_OPEN;
-                const ul = childElemsContainer;
+                const ul = subtreeElemsContainer;
                 toggleButton.onclick = function(){
                     if(toggleButton.className === this.CLASS_CLOSED){
                         toggleButton.className = this.CLASS_OPEN;
@@ -270,16 +270,16 @@ class JSTreeModifiable {
                 };
             }else{
                 try {
-                    lastChildPosition = parseInt(childElemsContainer.lastChild.getAttribute('data-position'));
+                    lastSubtreePosition = parseInt(subtreeElemsContainer.lastSubtree.getAttribute('data-position'));
                 }catch(e){}
             }
-            node.position = lastChildPosition+1;
+            node.position = lastSubtreePosition+1;
 
             const xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState != 4) return;
                 const newNode = JSON.parse(xhr.responseText);
-                const newLi = this.renderOneTreeNode(node, childElemsContainer);
+                const newLi = this.renderOneTreeNode(node, subtreeElemsContainer);
                 newLi.setAttribute('data-id', newNode.id);
             };
             xhr.open('POST', this.url);
