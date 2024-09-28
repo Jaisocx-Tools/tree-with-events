@@ -1,7 +1,6 @@
 :root {
   --toggle-button-size: 60%;
   --toggle-button-animated--image-url: url('/jstree/www/images/icons/button-animated.gif');
-  --toggle-button-closed--image-url: none;
   --toggle-button-opened--image-url: url('/jstree/www/images/icons/button-opened.png');
   --toggle-button-without-subtree--image-url: url('/jstree/www/images/icons/button-without-subtree.svg');
 
