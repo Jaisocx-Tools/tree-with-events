@@ -4,12 +4,90 @@
         <meta charset="UTF-8">
         <title>JS Tree</title>
 
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <link href="/jstree/www/css/tree.css" rel="stylesheet" />
         <script type="text/javascript" src="/jstree/www/js/JSTree.js"></script>
         <script type="text/javascript" src="/jstree/www/js/JSTreeModifiable.js"></script>
         <style>
+            @media (max-width: 440px) {
+                body {
+                    width: 100vw !important;
+                    min-width: 100vw;
+                    max-width: 100vw !important;
+                    margin: 0;
+                    padding: 0;
+
+                    height: 100vh;
+                    min-height: 100vh;
+                    max-height: 100vh;
+
+                    box-sizing: border-box;
+                    overflow: hidden !important;
+                }
+                h1 {
+                    margin-top: 4rem !important;
+                }
+                .tree#jstree-01 {
+                    width: 100vw !important;
+                    min-width: 100vw;
+                    max-width: 100vw !important;
+
+                    height: calc(100vh - 10.8rem);
+                    min-height: calc(100vh - 10.8rem);
+                    max-height: calc(100vh - 10.8rem);
+
+                    overflow-y: auto;
+
+                    position: fixed;
+                    top: 10.8rem;
+
+                    display: none;
+                }
+
+                .grid-container {
+                    display: block !important;
+                    overflow: visible;
+                }
+
+                #content {
+                    width: 100vw !important;
+                    min-width: 100vw;
+                    max-width: 100vw !important;
+
+                    box-sizing: border-box;
+
+                    height: 90vh;
+                    min-height: 90vh;
+                    max-height: 90vh;
+
+                    font-size: 1.8rem;
+                    line-height: 2.4rem;
+                }
+
+                .button {
+                    display: block !important;
+                    position: fixed;
+                    box-sizing: border-box;
+                    top: 0.5rem;
+                    right: 0.3rem;
+                    background-color: white;
+                    border: #bbb;
+                    color: #444;
+                    font-size: 2rem;
+                    line-height: 3rem;
+                    border-radius: 0.5rem;
+                    text-align: center;
+                    padding: 0 0.5rem;
+                }
+            }
+
+            .button {
+                display: none;
+            }
+
             .grid-container {
+                position: relative;
                 display: grid;
                 gap: 12px;
                 padding: 12px;
@@ -26,6 +104,7 @@
         </style>
     </head>
     <body>
+        <a class="button" href="javascript: showTree(true);">NavBar</a>
         <h1>JS Tree</h1>
         <h2>Github Pages</h2>
         <div class="grid-container">
@@ -34,11 +113,20 @@
         </div>
 
         <script>
+            const showTree = (show) => {
+                const displayCssRule = show ? 'block' : 'none';
+                document.getElementById('jstree-01').style.display = displayCssRule;
+            };
 
             /* an example to use for handling a mouse click on a tree elem. parameter is elem json. */
             const exampleFunction = (event, node) => {                
                 const elem = document.getElementById('content');
                 elem.innerHTML = node.text ?? '';
+
+                const isMobile = window.innerWidth < 440;
+                if (isMobile) {
+                    showTree(false);
+                }
             };
 
             window.addEventListener('DOMContentLoaded', () => {
@@ -49,8 +137,11 @@
                     .setNodeClickEventHandler(exampleFunction)
                     .setDebug(false)
                     .load();
-            });
 
+                if (window.innerWidth < 440) {
+                    showTree(true);
+                }
+            });
         </script>
     </body>
 </html>

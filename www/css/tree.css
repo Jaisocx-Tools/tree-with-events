@@ -116,18 +116,17 @@
     display: none;
 }
 
-.tree .toggle-with-subtree-closed span.opened {
+.tree span.opened {
     display: none;
 }
 
-.tree .toggle-with-subtree-closed span.closed {
+.tree span.closed {
     display: block;
 }
 
-.tree .toggle-with-subtree-closed span.without-subtree {
+.tree span.without-subtree {
     display: none;
 }
-
 
 .tree .toggle-with-subtree-opened span.opened {
     display: block;
@@ -177,4 +176,14 @@
 }
 .context-menu-container li:first-of-type{
     margin-top: 0px;
+}
+
+@media (max-width: 440px) {
+    .tree {
+        --size--tree-element: 2.2rem;
+    }
+
+    .tree .toggle-button {
+        margin-right: 1rem;
+    }    
 }

@@ -10,7 +10,6 @@ class JSTree
         this.accessToken = '';
 
         this.CLASS_OPENED = 'toggle-with-subtree-opened';
-        this.CLASS_CLOSED = 'toggle-with-subtree-closed';
         this.CLASS_WITHOUT_SUBTREE = 'toggle-without-subtree';
         this.CLASS_AND_ID__CONTEXT_MENU = 'context-menu-container';
     }
@@ -110,7 +109,6 @@ class JSTree
             toggleButton.classList.add(this.CLASS_OPENED);
             ul.style.display = 'block';
         }else{
-            toggleButton.classList.add(this.CLASS_CLOSED);
             ul.style.display = 'none';
         }
 
@@ -124,29 +122,25 @@ class JSTree
 
     toggleButtonHandler(event) {
         const toggleButton = event.target.closest('.toggle-button');
-        if (
-            !event.target.classList.contains('toggle-button') && 
-            (toggleButton === null)
+       if (
+            !toggleButton ||
+            !toggleButton.classList.contains('toggle-button') ||
+            toggleButton.classList.contains(this.CLASS_WITHOUT_SUBTREE)
         ) {
             return;
         }
 
-        if (toggleButton.classList.contains(this.CLASS_WITHOUT_SUBTREE)) {
-            return;
-        }
-
         event.preventDefault();
+        event.stopPropagation();
 
         let subtreeContainer = toggleButton.closest('li').getElementsByTagName('ul')[0];
-
-        if(toggleButton.classList.contains(this.CLASS_CLOSED)) {
-            toggleButton.classList.remove(this.CLASS_CLOSED);
+        const isOpened = toggleButton.classList.contains(this.CLASS_OPENED);
+        if (isOpened) {
+            toggleButton.classList.remove(this.CLASS_OPENED);
+            subtreeContainer.style.display = 'none';
+        } else {
             toggleButton.classList.add(this.CLASS_OPENED);
             subtreeContainer.style.display = 'block';
-        }else if(toggleButton.classList.contains(this.CLASS_OPENED)) {
-            toggleButton.classList.remove(this.CLASS_OPENED);
-            toggleButton.classList.add(this.CLASS_CLOSED);
-            subtreeContainer.style.display = 'none';
         }
     }
 
