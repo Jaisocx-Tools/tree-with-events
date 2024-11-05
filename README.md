@@ -5,7 +5,7 @@ https://jaisocx-tools.github.io/jstree/
 
 
 ## screenshot
-![JSTree screenshot](./Screenshot-2024-09-21-at-05.47.25.png)
+![JSTree screenshot](./Screenshot_2024-11-05_at_09.33.32.png)
 
 
 ## about
