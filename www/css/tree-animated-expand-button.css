@@ -33,13 +33,13 @@
     justify-content: flex-start;
 }
 
-.tree ul li .tree-element {
-    height: var(--size--tree-element);
-    min-height: var(--size--tree-element);
+.tree ul li .jstree-html-node {
+    height: var(--size--jstree-html-node);
+    min-height: var(--size--jstree-html-node);
     width: auto;
 
-    font-size: var(--size--tree-element);
-    line-height: var(--size--tree-element);
+    font-size: var(--size--jstree-html-node);
+    line-height: var(--size--jstree-html-node);
     overflow: hidden;
 
     display: flex;
@@ -55,8 +55,8 @@
     border: var(--border--subtree-parent);
 }
 
-.tree .tree-element-label {
-    border: var(--border--tree-element);
+.tree .jstree-html-node-label {
+    border: var(--border--jstree-html-node);
     background-color: inherit;
     font-family: 'Open Sans';
     font-size: 80%;
@@ -69,26 +69,26 @@
     text-decoration: none;
     color: var(--text-color--dark);
 }
-.tree .tree-element-label:hover {
+.tree .jstree-html-node-label:hover {
     color: var(--text-color--hover);
 }
 
-.tree .toggle-button {
+.tree .open-button {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 
-    border: var(--border--tree-element-toggle-button);
+    border: var(--border--jstree-html-node-open-button);
     height: 100%;
-    width: var(--size--tree-element);
+    width: var(--size--jstree-html-node);
     margin: auto;
 }
 
-.tree .toggle-button > span {
+.tree .open-button > span {
     display: none;
-    height: var(--toggle-button-size);
-    width: var(--toggle-button-size);
+    height: var(--open-button-size);
+    width: var(--open-button-size);
 
     font-size: inherit;
 
@@ -99,30 +99,30 @@
     background-attachment: local;
 }
 
-.tree .toggle-button > span.opened {
-    background-image: var(--toggle-button-opened--image-url);
+.tree .open-button > span.opened {
+    background-image: var(--open-button-opened--image-url);
 }
-.tree .toggle-button > span.closed {
-    background-image: var(--toggle-button-closed--image-url);
+.tree .open-button > span.closed {
+    background-image: var(--open-button-closed--image-url);
     transform: rotate(90deg);
 }
-.tree .toggle-button > span.without-subtree {
-    background-image: var(--toggle-button-without-subtree--image-url);
+.tree .open-button > span.without-subtree {
+    background-image: var(--open-button-without-subtree--image-url);
     color: crimson !important;
 }
-.tree .toggle-button > span.animated {
-    background-image: var(--toggle-button-animated--image-url);
+.tree .open-button > span.animated {
+    background-image: var(--open-button-animated--image-url);
 }
 
-.tree .toggle-button.toggle-with-subtree-opened:hover > span.opened,
-.tree .toggle-button.toggle-with-subtree-opened:hover > span.closed,
-.tree .toggle-button.toggle-with-subtree-closed:hover > span.opened,
-.tree .toggle-button.toggle-with-subtree-closed:hover > span.closed {
+.tree .open-button.toggle-with-subtree-opened:hover > span.opened,
+.tree .open-button.toggle-with-subtree-opened:hover > span.closed,
+.tree .open-button.toggle-with-subtree-closed:hover > span.opened,
+.tree .open-button.toggle-with-subtree-closed:hover > span.closed {
     display: none;
 }
 
-.tree .toggle-button.toggle-with-subtree-opened:hover > span.animated,
-.tree .toggle-button.toggle-with-subtree-closed:hover > span.animated {
+.tree .open-button.toggle-with-subtree-opened:hover > span.animated,
+.tree .open-button.toggle-with-subtree-closed:hover > span.animated {
     display: block;
 }
 

@@ -45,6 +45,11 @@
                     display: none;
                 }
 
+                .tree#jstree-01 .hyperlink .jstree-html-node .jstree-html-node-label {
+                    padding: 0 0.6rem;
+                    font-size: 1.6rem;
+                }
+
                 .grid-container {
                     display: block !important;
                     overflow: visible;
@@ -97,7 +102,7 @@
                 gap: 12px;
                 padding: 12px;
                 grid-template-columns: 260px 300px;
-                background-color: #efe;
+                background-color: white;
                 margin: 0 auto;
                 width:min-content;
             }
@@ -105,6 +110,15 @@
             #content {
                 border: 1px solid #eee;
                 padding: 20px;
+            }
+
+            /* a custom node styling example, based on json field cssClassName */
+            .hyperlink .jstree-html-node .jstree-html-node-label {
+                padding: 0 0.6rem;
+                font-size: 0.9rem;
+                background-color: #efe;
+                border: 1px solid lime;
+                border-radius: 0.5rem;
             }
         </style>
     </head>
@@ -124,9 +138,9 @@
             };
 
             /* an example to use for handling a mouse click on a tree elem. parameter is elem json. */
-            const exampleFunction = (event, node) => {                
+            const exampleFunction = (event) => {                
                 const elem = document.getElementById('content');
-                elem.innerHTML = node.text ?? '';
+                elem.innerHTML = event.jsonNode.text ?? '';
 
                 const isMobile = window.innerWidth < 440;
                 if (isMobile) {
@@ -134,13 +148,33 @@
                 }
             };
 
+            const exampleOnAfterRenderHandler = (event) => {
+                const art = event.treeItemJson.art;
+                if (!art) {
+                    return;
+                }
+
+                if (art === 'art') {
+                    console.log(event);
+                }
+            }
+
             window.addEventListener('DOMContentLoaded', () => {
                 const tree = new JSTree();
                 tree
-                    .setElementId('jstree-01')
+                    .setDebug(true)
+                    .setModifiable(true)
+                    .setMainHtmlNodeId('jstree-01')
                     .setUrl('/jstree/www/data/tree-data.json')
-                    .setNodeClickEventHandler(exampleFunction)
-                    .setDebug(false)
+                    .setJsonFieldsNames(new JSTreeJsonNodeFieldsNames())
+                    .addJSTreeEventListener (
+                        tree.EVENT_NAME__TREE_NODE_LABEL__CLICK,
+                        exampleFunction
+                    )
+                    .addJSTreeEventListener (
+                        tree.EVENT_NAME__AFTER_RENDER_ONE_NODE,
+                        exampleOnAfterRenderHandler
+                    )
                     .load();
 
                 if (window.innerWidth < 440) {
